@@ -1,6 +1,4 @@
-# To add a new cell, type '# %%'
-# To add a new markdown cell, type '# %% [markdown]'
-# %%
+
 # Dependencies
 import tweepy
 import time
@@ -10,10 +8,19 @@ import random
 import requests as req
 import datetime
 
-from config import consumer_key, consumer_secret, access_token, access_token_secret, weather_api_key
+is_heroku = False
+if 'IS_HEROKU' in os.environ:
+    is_heroku = True
 
+if is_heroku:
+    consumer_key = os.environ.get('consumer_key')
+    consumer_secret = os.environ.get('consumer_secret')
+    access_token = os.environ.get('access_token')
+    access_token_secret = os.environ.get('access_token_secret')
+    weather_api_key = os.environ.get('weather_api_key')
+else:
+    from config import consumer_key, consumer_secret, access_token, access_token_secret, weather_api_key
 
-# %%
 # Twitter API Keys
 consumer_key = consumer_key
 consumer_secret = consumer_secret
@@ -21,8 +28,6 @@ access_token = access_token
 access_token_secret = access_token_secret
 
 
-# %%
-# Create a function that gets the weather in London and Tweets it
 def WeatherTweet():
 
     # Construct a Query URL for the OpenWeatherMap
@@ -51,13 +56,7 @@ def WeatherTweet():
     print("Tweeted successfully!")
 
 
-# %%
-# Test out the function
-# WeatherTweet()
 
-
-# %%
-# Tweet out the weather every one minute
 while(True):
     WeatherTweet()
     time.sleep(60)
